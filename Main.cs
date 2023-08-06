@@ -10,12 +10,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using TrayIconForm;
 using TwitchLib.Api.Helix;
+using TwitchLib.Client;
 using TwitchLib.Client.Models;
 using TwitchXIV;
 
 namespace TwitchPopup
 {
-    public partial class Form1 : Form
+
+
+    public partial class Main : Form
     {
         public static Keys ActivationKey = Keys.F4;
         private KeyHandler ghk;
@@ -24,23 +27,38 @@ namespace TwitchPopup
         public static string TwitchChannel = "";
         public static string TwitchOAuth = "";
 
-        public Form1()
+        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        private static extern bool ShowWindow(IntPtr hwnd, int nCmdShow);
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool SetForegroundWindow(IntPtr hwnd);
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern IntPtr SetFocus(IntPtr hwnd);
+
+        public Main()
         {
             InitializeComponent();
-
-            ghk = new KeyHandler(0, ActivationKey, this);
-            ghk.Register();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            if (File.Exists("config.json")) { Configuration.Load(); }
             lblKeyPressed.Text = ActivationKey.ToString();
+            ghk = new KeyHandler(0, ActivationKey, this);
+            ghk.Register();
         }
 
         private void HandleHotkey()
         {
-            if (WindowTitle.GetActiveWindowTitle() != txtWindow.Text) { return; }
+            if (WindowTitle.GetActiveWindowTitle() != txtWindow.Text && String.IsNullOrWhiteSpace(txtWindow.Text) == false) { return; }
             string TwitchMessage = Input.ShowDialog("Enter your message:");
+            IntPtr h = FindWindow("Twitch Popup", null);
+            ShowWindow(h, 5);
+            SetForegroundWindow(h);
+            SetFocus(h);
+            if (String.IsNullOrWhiteSpace(TwitchMessage)) { return; }
+            if (BG3Client.Client == null || lblConnected.Text == "False") { MessageBox.Show("You are not connected to twitch!"); return; }
             if (BG3Client.Client.IsConnected == false)
             {
                 BG3Client.DoConnect();
@@ -97,6 +115,11 @@ namespace TwitchPopup
                 Thread.Sleep(1000);
             } while (BG3Client.Client.JoinedChannels.Count() == 0);
             lblConnected.Text = "Connected!";
+        }
+
+        private void lblConnected_Click(object sender, EventArgs e)
+        {
+
         }
 
         //private string Get_Copy()

@@ -1,6 +1,6 @@
 ﻿namespace TwitchPopup
 {
-    partial class Form1
+    partial class Main
     {
         /// <summary>
         /// Required designer variable.
@@ -102,6 +102,7 @@
             lblConnected.Size = new Size(33, 15);
             lblConnected.TabIndex = 5;
             lblConnected.Text = "False";
+            lblConnected.Click += lblConnected_Click;
             // 
             // txtWindow
             // 
@@ -109,7 +110,6 @@
             txtWindow.Name = "txtWindow";
             txtWindow.Size = new Size(241, 23);
             txtWindow.TabIndex = 6;
-            txtWindow.Text = "Honkai: Star Rail";
             // 
             // label4
             // 
@@ -120,7 +120,7 @@
             label4.TabIndex = 7;
             label4.Text = "Only show when this window is focused:";
             // 
-            // Form1
+            // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -133,7 +133,7 @@
             Controls.Add(label1);
             Controls.Add(button1);
             Controls.Add(lblKeyPressed);
-            Name = "Form1";
+            Name = "Main";
             Text = "Twitch Popup";
             WindowState = FormWindowState.Minimized;
             Load += Form1_Load;
@@ -145,14 +145,14 @@
 
         #endregion
 
-        private Button button1;
-        private Label label1;
-        private ErrorProvider errorProvider1;
-        private Label label2;
-        private Button btnConnectToTwitch;
+        public Button button1;
+        public Label label1;
+        public ErrorProvider errorProvider1;
+        public Label label2;
+        public Button btnConnectToTwitch;
         public Label lblKeyPressed;
+        public Label label4;
+        public static TextBox txtWindow;
         public static Label lblConnected;
-        private Label label4;
-        private TextBox txtWindow;
     }
 }
