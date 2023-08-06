@@ -51,7 +51,7 @@ namespace TwitchPopup
 
         private void HandleHotkey()
         {
-            if (WindowTitle.GetActiveWindowTitle() != txtWindow.Text && String.IsNullOrWhiteSpace(txtWindow.Text) == false) { return; }
+            if (WindowTitle.GetActiveWindowTitle().Contains(txtWindow.Text) == false && String.IsNullOrWhiteSpace(txtWindow.Text) == false) { return; }
             string TwitchMessage = Input.ShowDialog("Enter your message:");
             IntPtr h = FindWindow("Twitch Popup", null);
             ShowWindow(h, 5);
