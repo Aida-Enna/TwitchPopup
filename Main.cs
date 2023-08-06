@@ -1,38 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Diagnostics;
 using TrayIconForm;
-using TwitchLib.Api.Helix;
-using TwitchLib.Client;
-using TwitchLib.Client.Models;
 using TwitchXIV;
 
 namespace TwitchPopup
 {
-
-
     public partial class Main : Form
     {
         public static Keys ActivationKey = Keys.F4;
         private KeyHandler ghk;
-        public static bool DetectingKeys = false;
-        public static string TwitchUsername = "";
-        public static string TwitchChannel = "";
-        public static string TwitchOAuth = "";
+        public static string TwitchUsername = "null";
+        public static string TwitchChannel = "null";
+        public static string TwitchOAuth = "null";
 
         [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
         [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         private static extern bool ShowWindow(IntPtr hwnd, int nCmdShow);
+
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         private static extern bool SetForegroundWindow(IntPtr hwnd);
+
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         private static extern IntPtr SetFocus(IntPtr hwnd);
 
@@ -52,27 +40,21 @@ namespace TwitchPopup
         private void HandleHotkey()
         {
             if (WindowTitle.GetActiveWindowTitle().Contains(txtWindow.Text) == false && String.IsNullOrWhiteSpace(txtWindow.Text) == false) { return; }
+            ghk.Unregister();
             string TwitchMessage = Input.ShowDialog("Enter your message:");
-            IntPtr h = FindWindow("Twitch Popup", null);
+            IntPtr h = FindWindow("Twitch Popup Input", null);
             ShowWindow(h, 5);
             SetForegroundWindow(h);
             SetFocus(h);
-            if (String.IsNullOrWhiteSpace(TwitchMessage)) { return; }
-            if (BG3Client.Client == null || lblConnected.Text == "False") { MessageBox.Show("You are not connected to twitch!"); return; }
+            if (String.IsNullOrWhiteSpace(TwitchMessage)) { ghk.Register(); return; }
+            if (BG3Client.Client == null || lblConnected.Text == "False") { MessageBox.Show("You are not connected to twitch!"); ghk.Register(); return; }
             if (BG3Client.Client.IsConnected == false)
             {
                 BG3Client.DoConnect();
                 BG3Client.Client.JoinChannel(TwitchChannel);
             }
             BG3Client.Client.SendMessage(BG3Client.Client.JoinedChannels.First(), TwitchMessage);
-            //string s = Get_Copy();
-
-            //notifyIcon1.BalloonTipText = s;
-            //notifyIcon1.BalloonTipTitle = "You have pressed CTRL+i";
-            //notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
-
-            //notifyIcon1.Visible = true;
-            //notifyIcon1.ShowBalloonTip(500);
+            ghk.Register();
         }
 
         protected override void WndProc(ref Message m)
@@ -82,26 +64,16 @@ namespace TwitchPopup
             base.WndProc(ref m);
         }
 
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            DetectingKeys = true;
-        }
-
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
-        {
-
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
-            TwitchUsername = Input.ShowDialog("Enter your twitch username:");
-            TwitchChannel = Input.ShowDialog("Enter the initial channel name to join here:");
-            TwitchOAuth = Input.ShowDialog("Enter your oath code here (including the \"oath:\" part):");
+            if (TwitchUsername == "null") { TwitchUsername = Input.ShowDialog("Enter your twitch username:"); }
+            if (TwitchChannel == "null") { TwitchChannel = Input.ShowDialog("Enter the initial channel name to join here:"); }
+            if (TwitchOAuth == "null")
+            {
+                MessageBox.Show("Next, we'll open a window to the twitch OAuth Password Generator. Click 'Connect' and log into Twitch and then it'll spit out a series of letters and numbers. Copy that and come back here after.");
+                Process.Start(new ProcessStartInfo("https://twitchapps.com/tmi/") { UseShellExecute = true });
+                TwitchOAuth = Input.ShowDialog("Enter your oath code here (including the \"oath:\" part):");
+            }
             lblConnected.Text = "Attempting to connect...";
             BG3Client.DoConnect();
             do
@@ -115,41 +87,15 @@ namespace TwitchPopup
                 Thread.Sleep(1000);
             } while (BG3Client.Client.JoinedChannels.Count() == 0);
             lblConnected.Text = "Connected!";
+            Configuration.Save();
         }
 
-        private void lblConnected_Click(object sender, EventArgs e)
+        private void button2_Click_1(object sender, EventArgs e)
         {
-
+            TwitchUsername = "null";
+            TwitchChannel  = "null";
+            TwitchOAuth = "null";
+            Configuration.Save();
         }
-
-        //private string Get_Copy()
-        //{
-        //    string r;
-        //    // Retrieves data from Clipboard
-        //    IDataObject iData = Clipboard.GetDataObject();
-        //    // Is Data Text?
-        //    if (iData.GetDataPresent(DataFormats.Text))
-        //        r = (String)iData.GetData(DataFormats.Text);
-        //    else
-        //        r = "nothing";
-        //    return r;
-        //}
-        //private void Information_Resize(object sender, EventArgs e)
-        //{
-        //    //if (FormWindowState.Minimized == this.WindowState)
-        //    //{
-        //    //    notifyIcon1.BalloonTipText = "My application still working...";
-        //    //    notifyIcon1.BalloonTipTitle = "My Sample Application";
-        //    //    notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
-
-        //    //    notifyIcon1.Visible = true;
-        //    //    notifyIcon1.ShowBalloonTip(500);
-        //    //    this.Hide();
-        //    //}
-        //    //else if (FormWindowState.Normal == this.WindowState)
-        //    //{
-        //    //    notifyIcon1.Visible = false;
-        //    //}
-        //}
     }
 }

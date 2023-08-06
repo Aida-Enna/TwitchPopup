@@ -38,6 +38,7 @@
             lblConnected = new Label();
             txtWindow = new TextBox();
             label4 = new Label();
+            button2 = new Button();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             SuspendLayout();
             // 
@@ -59,7 +60,6 @@
             button1.TabIndex = 1;
             button1.Text = "Reassign hotkey";
             button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
             // 
             // label1
             // 
@@ -92,7 +92,6 @@
             label2.Size = new Size(118, 15);
             label2.TabIndex = 4;
             label2.Text = "Connected to twitch:";
-            label2.Click += label2_Click;
             // 
             // lblConnected
             // 
@@ -102,7 +101,6 @@
             lblConnected.Size = new Size(33, 15);
             lblConnected.TabIndex = 5;
             lblConnected.Text = "False";
-            lblConnected.Click += lblConnected_Click;
             // 
             // txtWindow
             // 
@@ -120,11 +118,22 @@
             label4.TabIndex = 7;
             label4.Text = "Only activate when a window title contains\r\nthis text in it (via the Taskbar):";
             // 
+            // button2
+            // 
+            button2.Location = new Point(151, 10);
+            button2.Name = "button2";
+            button2.Size = new Size(64, 47);
+            button2.TabIndex = 8;
+            button2.Text = "Reset Twitch";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click_1;
+            // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(266, 156);
+            Controls.Add(button2);
             Controls.Add(label4);
             Controls.Add(txtWindow);
             Controls.Add(lblConnected);
@@ -135,9 +144,7 @@
             Controls.Add(lblKeyPressed);
             Name = "Main";
             Text = "Twitch Popup";
-            WindowState = FormWindowState.Minimized;
             Load += Form1_Load;
-            KeyDown += Form1_KeyDown;
             ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -152,6 +159,7 @@
         public Button btnConnectToTwitch;
         public Label lblKeyPressed;
         public Label label4;
+        public Button button2;
         public static TextBox txtWindow;
         public static Label lblConnected;
     }

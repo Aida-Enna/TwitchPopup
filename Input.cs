@@ -15,7 +15,7 @@ namespace TwitchPopup
                 Width = 500,
                 Height = 100,
                 FormBorderStyle = FormBorderStyle.FixedDialog,
-                Text = "Twitch Popup",
+                Text = "Twitch Popup Input",
                 TopMost = true,
                 StartPosition = FormStartPosition.CenterScreen
             };
