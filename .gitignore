@@ -43,3 +43,6 @@ bld/
 .vs/
 [Pp]ackages/
 [Bb]ackup/
+
+#Ignore user config files
+*.json
