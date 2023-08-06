@@ -4,17 +4,25 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TrayIconForm;
+using TwitchLib.Api.Helix;
+using TwitchLib.Client.Models;
+using TwitchXIV;
 
 namespace TwitchPopup
 {
     public partial class Form1 : Form
     {
-        public static Keys ActivationKey = Keys.Z;
+        public static Keys ActivationKey = Keys.F4;
         private KeyHandler ghk;
+        public static bool DetectingKeys = false;
+        public static string TwitchUsername = "";
+        public static string TwitchChannel = "";
+        public static string TwitchOAuth = "";
 
         public Form1()
         {
@@ -26,22 +34,19 @@ namespace TwitchPopup
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
-        }
-
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
-        {
-            Console.WriteLine("You pressed " + e.KeyCode);
-            if (e.KeyCode == Keys.D0 || e.KeyCode == Keys.NumPad0)
-            {
-                //Do Something if the 0 key is pressed (includes Num Pad 0)
-            }
+            lblKeyPressed.Text = ActivationKey.ToString();
         }
 
         private void HandleHotkey()
         {
-
-            string promptValue = Input.ShowDialog("Test", "123");
+            if (WindowTitle.GetActiveWindowTitle() != txtWindow.Text) { return; }
+            string TwitchMessage = Input.ShowDialog("Enter your message:");
+            if (BG3Client.Client.IsConnected == false)
+            {
+                BG3Client.DoConnect();
+                BG3Client.Client.JoinChannel(TwitchChannel);
+            }
+            BG3Client.Client.SendMessage(BG3Client.Client.JoinedChannels.First(), TwitchMessage);
             //string s = Get_Copy();
 
             //notifyIcon1.BalloonTipText = s;
@@ -62,6 +67,36 @@ namespace TwitchPopup
         private void label2_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            DetectingKeys = true;
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            TwitchUsername = Input.ShowDialog("Enter your twitch username:");
+            TwitchChannel = Input.ShowDialog("Enter the initial channel name to join here:");
+            TwitchOAuth = Input.ShowDialog("Enter your oath code here (including the \"oath:\" part):");
+            lblConnected.Text = "Attempting to connect...";
+            BG3Client.DoConnect();
+            do
+            {
+                Thread.Sleep(1000);
+            } while (BG3Client.Client.IsConnected == false);
+            lblConnected.Text = "Logged in, joining channel...";
+            BG3Client.Client.JoinChannel(TwitchChannel);
+            do
+            {
+                Thread.Sleep(1000);
+            } while (BG3Client.Client.JoinedChannels.Count() == 0);
+            lblConnected.Text = "Connected!";
         }
 
         //private string Get_Copy()

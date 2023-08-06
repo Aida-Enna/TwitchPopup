@@ -8,18 +8,19 @@ namespace TwitchPopup
 {
     public static class Input
     {
-        public static string ShowDialog(string text, string caption)
+        public static string ShowDialog(string text)
         {
             Form prompt = new Form()
             {
                 Width = 500,
                 Height = 100,
                 FormBorderStyle = FormBorderStyle.FixedDialog,
-                Text = caption,
+                Text = "Twitch Popup",
+                TopMost = true,
                 StartPosition = FormStartPosition.CenterScreen
             };
-            Label textLabel = new Label() { Left = 0, Top =0, Text = text };
-            TextBox textBox = new TextBox() { Left = 0, Top = 20, Width = 400 };
+            Label textLabel = new Label() { Left = 0, Top =0, AutoSize = true, Text = text };
+            TextBox textBox = new TextBox() { Left = 0, Top = 20, Width = 500 };
             Button confirmation = new Button() { Text = "OK", Left = 350, Width = 100, Top = 70, DialogResult = DialogResult.OK };
             confirmation.Click += (sender, e) => { prompt.Close(); };
             prompt.Controls.Add(textBox);
