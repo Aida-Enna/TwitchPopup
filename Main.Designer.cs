@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             lblKeyPressed = new Label();
             button1 = new Button();
             label1 = new Label();
@@ -142,6 +143,7 @@
             Controls.Add(label1);
             Controls.Add(button1);
             Controls.Add(lblKeyPressed);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Main";
             Text = "Twitch Popup";
             Load += Form1_Load;

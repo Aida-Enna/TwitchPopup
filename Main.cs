@@ -93,7 +93,7 @@ namespace TwitchPopup
         private void button2_Click_1(object sender, EventArgs e)
         {
             TwitchUsername = "null";
-            TwitchChannel  = "null";
+            TwitchChannel = "null";
             TwitchOAuth = "null";
             Configuration.Save();
         }

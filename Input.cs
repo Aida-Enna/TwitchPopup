@@ -29,7 +29,8 @@ namespace TwitchPopup
             prompt.AcceptButton = confirmation;
 
             prompt.TopMost = true;
-
+            prompt.Focus();
+            prompt.BringToFront();
             return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
         }
     }
