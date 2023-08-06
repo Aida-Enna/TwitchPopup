@@ -79,7 +79,7 @@
             btnConnectToTwitch.Location = new Point(81, 10);
             btnConnectToTwitch.Name = "btnConnectToTwitch";
             btnConnectToTwitch.Size = new Size(64, 47);
-            btnConnectToTwitch.TabIndex = 3;
+            btnConnectToTwitch.TabIndex = 2;
             btnConnectToTwitch.Text = "Connect to Twitch";
             btnConnectToTwitch.UseVisualStyleBackColor = true;
             btnConnectToTwitch.Click += button2_Click;
@@ -106,25 +106,25 @@
             // 
             // txtWindow
             // 
-            txtWindow.Location = new Point(11, 108);
+            txtWindow.Location = new Point(11, 121);
             txtWindow.Name = "txtWindow";
             txtWindow.Size = new Size(241, 23);
-            txtWindow.TabIndex = 6;
+            txtWindow.TabIndex = 3;
             // 
             // label4
             // 
             label4.AutoSize = true;
             label4.Location = new Point(12, 90);
             label4.Name = "label4";
-            label4.Size = new Size(221, 15);
+            label4.Size = new Size(233, 30);
             label4.TabIndex = 7;
-            label4.Text = "Only show when this window is focused:";
+            label4.Text = "Only activate when a window title contains\r\nthis text in it (via the Taskbar):";
             // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(266, 143);
+            ClientSize = new Size(266, 156);
             Controls.Add(label4);
             Controls.Add(txtWindow);
             Controls.Add(lblConnected);
